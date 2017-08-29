@@ -12,13 +12,15 @@ public class News {
     private String type;
     private Date date;
     private String author;
+    private String URL;
 
-    public News(String title, String section, String type, Date date, String author){
+    public News(String title, String section, String type, Date date, String author, String URL){
         this.title = title;
         this.section = section;
         this.type = type;
         this.date = date;
         this.author = author;
+        this.URL = URL;
     }
 
 
@@ -26,39 +28,40 @@ public class News {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getSection() {
         return section;
     }
 
-    public void setSection(String section) {
-        this.section = section;
-    }
 
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+
+    public String getURL() {
+        return URL;
+    }
+
+
+    @Override
+    public String toString(){
+        String str = "Title: " + this.title + "\n" +
+                "Section: " + this.section + "\n" +
+                "Type: " + this.type + "\n" +
+                "Date: " + this.date.toString() + "\n" +
+                "Author: " + this.author + "\n" +
+                "URL: " + this.URL + "\n" ;
+
+        return str;
     }
 }
