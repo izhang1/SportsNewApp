@@ -14,23 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -143,9 +130,11 @@ public final class QueryUtils {
      */
     public static ArrayList<News> extractNews(String jsonResponse) {
 
-        // Create an empty ArrayList that we can start adding Newss to
+        Log.v("QueryUtils", jsonResponse);
         ArrayList<News> News = new ArrayList<>();
 
+
+        // Create an empty ArrayList that we can start adding News to
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
@@ -154,12 +143,23 @@ public final class QueryUtils {
             // TODO: Parse the response given by the SAMPLE_JSON_RESPONSE string
             // build up a list of News objects with the corresponding data.
             JSONObject obj = new JSONObject(jsonResponse);
-            JSONArray featureObj = (JSONArray) obj.get("features");
-            for(int i = 0; i < featureObj.length(); i++){
-                JSONObject temp = featureObj.getJSONObject(i);
-                JSONObject propObj = temp.getJSONObject("properties");
-                //News newNews = new News(propObj.getDouble("mag"), propObj.getString("place"), propObj.getLong("time"), propObj.getString("url"));
-                //Newss.add(newNews);
+
+            JSONObject responseObj = (JSONObject) obj.get("response");
+            JSONArray resultsObj = (JSONArray) responseObj.get("results");
+
+            // Date format "2017-08-03T17:40:54Z
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+            // public News(String title, String section, String type, Date date, String author)
+            for(int i = 0; i < resultsObj.length(); i++){
+                JSONObject temp = resultsObj.getJSONObject(i);
+                String dateString = temp.getString("webPublicationDate");
+                Date date = simpleDateFormat.parse(dateString);
+
+                News newNews = new News(temp.getString("webTitle"), temp.getString("sectionName"), temp.getString("type"), date, temp.optString("author", ""), temp.getString("webUrl"));
+                Log.v("QueryUtils", "News:" + newNews.toString());
+
+                News.add(newNews);
             }
 
         } catch (JSONException e) {
@@ -167,7 +167,12 @@ public final class QueryUtils {
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
             Log.e("QueryUtils", "Problem parsing the News JSON results", e);
+        } catch (ParseException e) {
+            Log.e("QueryUtils", "Problem with converting date", e);
+
+            e.printStackTrace();
         }
+
 
         // Return the list of Newss
         return News;
