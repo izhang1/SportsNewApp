@@ -31,14 +31,16 @@ public class NewsAdpater extends ArrayAdapter<News> {
                     R.layout.news_item, parent, false);
         }
 
-        News currentNews = getItem(position); // Need to extend ArrayAdapter<Earthquake> to be able to use this...
+        News currentNews = getItem(position);
 
+        // Setup UI and initialize
         TextView titleView = (TextView) listItemView.findViewById(R.id.tv_title);
         TextView sectionView = (TextView) listItemView.findViewById(R.id.tv_section);
         TextView typeView = (TextView) listItemView.findViewById(R.id.tv_type);
         TextView dateView = (TextView) listItemView.findViewById(R.id.tv_date);
         TextView authorView = (TextView) listItemView.findViewById(R.id.tv_author);
 
+        // Setting the value from News object
         titleView.setText(currentNews.getTitle());
         sectionView.setText(currentNews.getSection());
         typeView.setText(currentNews.getType());

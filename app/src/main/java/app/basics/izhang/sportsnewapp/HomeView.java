@@ -6,7 +6,6 @@ import android.content.Loader;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 
 import app.basics.izhang.sportsnewapp.data.News;
 import app.basics.izhang.sportsnewapp.data.NewsLoader;
-import app.basics.izhang.sportsnewapp.data.QueryUtils;
 
 public class HomeView extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<News>>{
 
@@ -36,6 +34,7 @@ public class HomeView extends AppCompatActivity implements LoaderManager.LoaderC
 
     }
 
+    /** Initializes the UI **/
     private void showUI(){
         ListView newsList = (ListView) this.findViewById(R.id.list_news);
         newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,7 +57,7 @@ public class HomeView extends AppCompatActivity implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> data) {
-        Log.v("LoadFinished", data.get(0).toString());
+        /** Saves the new data and refreshes the adapter **/
         newsArrayList = data;
         mAdpater.clear();
         mAdpater.addAll(newsArrayList);
